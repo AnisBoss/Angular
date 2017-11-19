@@ -15,8 +15,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 `Angular 4`
 `Bootstrap 3`
 
-
-## ###################################################################################################
+Markup :  - - - -
 
 ## API_django
 
