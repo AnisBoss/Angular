@@ -9,8 +9,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HomeComponent } from './components/home/home.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { AboutComponent } from './components/about/about.component';
-
-
+import {SharedServiceService} from './services/shared-service.service';
+import { FilterPipe }from './components/home/filter.pipe';
 
 const appRoutes: Routes = [
   { path: 'home', component:HomeComponent  },
@@ -28,6 +28,7 @@ const appRoutes: Routes = [
     HomeComponent,
     ContactComponent,
     AboutComponent,
+    FilterPipe
     
   ],
   imports: [
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
     HttpModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [SharedServiceService],
   bootstrap: [AppComponent]
 })
 

@@ -1,125 +1,74 @@
 import { Component, OnInit } from '@angular/core';
-
+import { SharedServiceService } from '../../services/shared-service.service';
+import { Subscription } from "rxjs/Subscription";
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  showComputers: boolean = true;
+  showTablets: boolean = false;
+  showSmartphones: boolean = false;
+  showResults:boolean = false;
+  computers: any = [];
+  tablets: any = [];
+  smartphones: any = [];
+  results:any[];
+  searchResults:any=[];
+  myValue:String ="";
 
-  computers =[{
-    'Price' : 800,
-    'Description' : 'Intel Core™ i5-7200U 2x 2.50 GHz',
-    'Brand':'HP X20-C7' ,
-    'Path':'/assets/hp.jpg'
-  },
-  {
-    'Price' : 600,
-    'Description' : 'Intel Core™ i3-3200U 2x 2.00 GHz',
-    'Brand':'ASUS B4-A20',
-    'Path':'/assets/asus.jpg'
-  },
-  {
-    'Price' : 600,
-    'Description' : 'AMD Core™ i5-4200HQ 3x 2.50 GHz',
-    'Brand':'ACER Z80-74',
-    'Path':'/assets/acer.jpg'
-  },
-  {
-    'Price' : 800,
-    'Description' : 'Intel Core™ i5-7200U 2x 2.50 GHz',
-    'Brand':'HP X20-C7' ,
-    'Path':'/assets/hp.jpg'
-  },
-  {
-    'Price' : 600,
-    'Description' : 'Intel Core™ i3-3200U 2x 2.00 GHz',
-    'Brand':'ASUS B4-A20',
-    'Path':'/assets/asus.jpg'
-  },
-  {
-    'Price' : 600,
-    'Description' : 'AMD Core™ i5-4200HQ 3x 2.50 GHz',
-    'Brand':'ACER Z80-74',
-    'Path':'/assets/acer.jpg'
-  },
-  {
-    'Price' : 800,
-    'Description' : 'Intel Core™ i5-7200U 2x 2.50 GHz',
-    'Brand':'HP X20-C7' ,
-    'Path':'/assets/hp.jpg'
-  },
-  {
-    'Price' : 600,
-    'Description' : 'Intel Core™ i3-3200U 2x 2.00 GHz',
-    'Brand':'ASUS B4-A20',
-    'Path':'/assets/asus.jpg'
-  },
-  {
-    'Price' : 600,
-    'Description' : 'AMD Core™ i5-4200HQ 3x 2.50 GHz',
-    'Brand':'ACER Z80-74',
-    'Path':'/assets/acer.jpg'
-  }];
-tablets =[{
-    'Price' : 800,
-    'Description' : 'Intel Core™ i5-7200U 2x 2.50 GHz',
-    'Brand':'tablet-HP' ,
-    'Path':'/assets/hp.jpg'
-  },
-  {
-    'Price' : 600,
-    'Description' : 'Intel Core™ i3-3200U 2x 2.00 GHz',
-    'Brand':'Tablet-ASUS B4-A20',
-    'Path':'/assets/asus.jpg'
-  },
-  {
-    'Price' : 600,
-    'Description' : 'AMD Core™ i5-4200HQ 3x 2.50 GHz',
-    'Brand':'Tablet-ACER Z80-74',
-    'Path':'/assets/acer.jpg'
-  }];
-smartphones =[{
-    'Price' : '800',
-    'Description' : 'Intel Core™ i5-7200U 2x 2.50 GHz',
-    'Brand':'HP X20-C7' ,
-    'Path':'/assets/hp.jpg'
-  },
-  {
-    'Price' : '600',
-    'Description' : 'Intel Core™ i3-3200U 2x 2.00 GHz',
-    'Brand':'ASUS',
-    'Path':'/assets/asus.png'
-  },
-  {
-    'Price' : '600',
-    'Description' : 'AMD Core™ i5-4200HQ 3x 2.50 GHz',
-    'Brand':'ACER',
-    'Path':'/assets/acer.png'
-  }];
-  showComputers:boolean=true;
-  showTablets:boolean=false;
-  showSmartphones:boolean=false;
-  constructor() { }
-get sC()
-{
-  return this.ShowComputers;
-}
- set ShowComputers(val)
-  {
-    this.showComputers=val;
+  private subscription: Subscription;
+  private subscriptionSearch: Subscription;
+  constructor(private shared: SharedServiceService) {
+    this.subscriptionSearch= this.shared.searchEvents.subscribe((newValue) => {
+     
+       this.results=[];
+      this.myValue=newValue;
+   
+      if (this.myValue.length <= 0)
+      {
+        this.showComputers=true;
+      }
+      else{
+         this.showComputers=false;
+     this.showSmartphones=false;
+     this.showTablets=false;
+this.showResults=true;
+
+     this.results=this.computers.concat(this.tablets,this.smartphones);
+    
+      }
+      });
+
+
+    this.subscription = this.shared.inputEvents.subscribe((newValue) => {
+      switch (newValue) {
+
+        case 'Computers': { console.log("baddelt computers"); this.showComputers = true; this.showTablets = false; this.showSmartphones = false;this.showResults=false; break }
+        case 'Tablets': { console.log("baddelt tablets"); this.showComputers = false; this.showTablets = true; this.showSmartphones = false;this.showResults=false; break }
+        case 'Smartphones': { console.log("baddelt smartphones"); this.showComputers = false; this.showTablets = false; this.showSmartphones = true;this.showResults=false; break };
+        default: console.log("tzammer wa7dek =)");
+      }
+    })
+
   }
-    set ShowTablets(val)
-  {
-    this.showTablets=val;
-  }
-    set ShowSmartphones(val)
-  {
-    this.showSmartphones=val;
-  }
- 
- 
+
+
   ngOnInit() {
+    this.shared.getComputers().subscribe(response => {
+      this.computers = response.json()["objects"];
+
+    });;
+    this.shared.getTablets().subscribe(response => {
+      this.tablets = response.json()["objects"];
+
+    });
+    this.shared.getSmartphones().subscribe(response => {
+
+      this.smartphones = response.json()["objects"];
+
+    });
   }
 
 }
