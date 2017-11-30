@@ -4,8 +4,19 @@ import { Http, Headers } from '@angular/http';
 export class SharedServiceService {
 
   constructor(private http: Http) {
-
+    
   }
+   
+public basketEvents: EventEmitter<string> = new EventEmitter();
+public productsEvents : EventEmitter<any> = new EventEmitter();
+public basketEvent(val : string,basket:any[])
+{
+  this.basketEvents.emit(val);
+  this.productsEvents.emit(basket);
+}
+
+
+
 
  public searchEvents: EventEmitter<string> = new EventEmitter();
 
@@ -24,18 +35,29 @@ export class SharedServiceService {
   headers = new Headers();
 
 
+
   getComputers() {
-    return this.http.get('http://127.0.0.1:8000/api/computer/');
+    return this.http.get('http://127.0.0.1:8000/api/products/?Type=Computer');
 
 
   }
   getTablets() {
-    return this.http.get('http://127.0.0.1:8000/api/tablet/');
+    return this.http.get('http://127.0.0.1:8000/api/products/?Type=Tablet');
   }
   getSmartphones() {
-    return this.http.get('http://127.0.0.1:8000/api/smartphone/');
+    return this.http.get('http://127.0.0.1:8000/api/products/?Type=Smartphone');
   }
 
-
-
+  getProducts(){
+    return this.http.get('http://127.0.0.1:8000/api/products/');
+  }
+getProductByID(id){
+  return this.http.get('http://127.0.0.1:8000/api/products/?id='+id);
+}
+  searchProduct(value)
+  {
+    //console.log("url : "+'http://127.0.0.1:8000/api/products/?Brand__contains='+value);
+    return this.http.get('http://127.0.0.1:8000/api/products/?Brand__contains='+value);
+    
+  }
 }

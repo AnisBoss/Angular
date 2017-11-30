@@ -11,6 +11,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { AboutComponent } from './components/about/about.component';
 import {SharedServiceService} from './services/shared-service.service';
 import { FilterPipe }from './components/home/filter.pipe';
+import {PopupModule} from 'ng2-opd-popup';
 
 const appRoutes: Routes = [
   { path: 'home', component:HomeComponent  },
@@ -35,7 +36,8 @@ const appRoutes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+     PopupModule.forRoot()
   ],
   providers: [SharedServiceService],
   bootstrap: [AppComponent]

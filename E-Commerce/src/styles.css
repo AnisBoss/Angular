@@ -3,4 +3,16 @@
 
 
 @import '~bootstrap/dist/css/bootstrap.css';
-@import '~font-awesome/css/font-awesome.css'
+@import '~font-awesome/css/font-awesome.css';
+
+.ng2 {
+position: fixed;
+right: 0;
+
+left: 0;
+border-radius: 3px;
+background-color: white;
+z-index: 999;
+top: 15% !important;
+}
+
