@@ -15,15 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from api.resources import NoteResource,TabletResource,SmartphoneResource,ProductsRessource
+from api.resources import NoteResource,TabletResource,SmartphoneResource,ProductsRessource,UserResource
 note_resource = NoteResource()
 tablet_resource = TabletResource()
 smartphone_resource=SmartphoneResource()
 products_resource=ProductsRessource()
+user_ressource=UserResource()
 urlpatterns = [
 	url(r'^admin/', admin.site.urls),
 	url(r'^api/',include(note_resource.urls)),
 	url(r'^api/', include(tablet_resource.urls)),
         url(r'^api/',include(smartphone_resource.urls)),
 	url(r'^api/',include(products_resource.urls)),
+	url(r'^api/',include(user_ressource.urls)),
 ]

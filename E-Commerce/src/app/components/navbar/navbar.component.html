@@ -1,3 +1,6 @@
+
+
+
 <nav class="navbar navbar-inverse" style="margin-bottom : 0px ;">
   <div class="container" style="float : left;min-width: 100%">
 
@@ -18,25 +21,164 @@
 
 
       </ul>
+      
       <span class="badge pull-right">{{items_number}}</span>
-      <img  width="55" (click)="basketProducts()" height="35" style="margin-top:7px;/*margin-left:80px*/" class="pull-right" [src]="panier"
-      />
+      <img  width="55" (click)="basketProducts()" height="35" style="margin-top:7px;/*margin-left:80px*/" class="pull-right" [src]="panier"/>
+     <!--if user is not connected-->
+      <span  *ngIf="!isAuthenticated" class="pull-right nav navbar-nav" style="color :azure ;font-size:15px; margin-right: 20px;margin-top:1px;"><li (click)="loginPopup()"><a href="#" >Login</a></li></span>
+       
+       <!--If user is Authenticated-->
+       <div *ngIf="isAuthenticated" class="dropdown pull-right">
+  <button class="btn-link dropdown-toggle" style="margin-top:14px" type="button" data-toggle="dropdown" >{{getUsername()}}
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a href="/profile/{{getUsername()}}">Profile</a></li>
+    <li><a href="/logout/{{getUsername}}">Logout</a></li>
+
+  </ul>
+</div> 
+
 
       <div>
         <form class="navbar-form navbar-toggler" style="margin-left:800px;" role="search">
           <div class="form-group">
-            <input type="text" [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" class="form-control" size="10" placeholder="Product Here ..."
-            />
+            <input type="text" [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" class="form-control" size="10" placeholder="Product Here ..."/>
           </div>
           <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-search" ></span></button>
         </form>
       </div>
+      
     </div>
   </div>
 </nav>
     <!-- /.navbar-collapse -->
 
-    <popup class="ng2" #popupNavbar>
+    <popup  class="ng2" #popupNavbar >
+      <div style="overflow-y: scroll;height:200px">
+    <div  *ngFor="let product of products; let i = index">
+            <div style="height:20px" data-category="view">
+                <div class="lib-panel">
+                    <div class="row box-shadow">
+                        <div class="col-md-4">
+                            <img class="lib-img-show" height="70" width="70" [src]="product.Path">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="lib-row lib-header">
+                               Brand  :  {{product.Brand}}
+                                <div class="lib-header-seperator"></div>
+                            </div>
+                            <div class="lib-row lib-desc">
+                               Description : {{product.Description}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          <div class="col-md-1" class="pull-right"><button (click)="removeFromBasket(i)"class="btn btn-danger" >Remove</button></div>
+         <br><hr size="4">
+    </div> 
+      </div>
+   
+    </popup>
 
-   <li *ngFor="let product of products">{{product.Brand}} </li>
+    <popup style="top: 10% !important;" class="ng2" #popupLogin (confirmClick)="login()">
+			
+   <div class="container"  class="text-center"  style="overflow-y: scroll;height:400px" >
+    	<div class="row" class="text-center">
+			<div class="col-md-9 col-md-offset-1">
+				<div class="panel panel-login">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-6">
+								<a href="#" class="active" id="login-form-link" onclick="showLogin()">Login</a>
+							</div>
+							<div class="col-xs-6">
+								<a href="#" id="register-form-link" onclick="showRegister()">Register</a>
+							</div>
+						</div>
+						<hr>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<form id="login-form"  role="form" style="display: block;" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+									<div class="form-group">
+										<input ngModel type="text" name="username"  id="username" required tabindex="1" class="form-control" placeholder="Username" value="">
+									</div>
+								
+									<div class="form-group">
+										<input ngModel type="password"  name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+									</div>
+										
+									<div class="form-group text-center">
+									<br>
+									<br>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="login-submit" [disabled]="!loginForm.form.valid" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="text-center">
+														<br>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								<form id="register-form"  role="form" style="display: none;" #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+									<div class="form-group">
+										<input ngModel type="text" name="username"  #username="ngModel" id="username" required tabindex="1" class="form-control" placeholder="Username" value="">
+									</div>
+									<div *ngIf="username.errors && (username.dirty || username.touched)" class="alert alert-danger">
+										Username is required
+									</div>
+										<div class="form-group">
+										<input ngModel type="text" #first_name="ngModel" name="first_name" id="first_name" required tabindex="1" class="form-control" placeholder="first_name" value="">
+									</div>
+									<div *ngIf="first_name.errors && (first_name.dirty || first_name.touched)" class="alert alert-danger">
+										First_name is required
+									</div>
+									<div class="form-group">
+										<input ngModel type="text" #last_name="ngModel" name="last_name" id="last_name" required tabindex="1" class="form-control" placeholder="last_name" value="">
+									</div>
+										<div *ngIf="last_name.errors && (last_name.dirty || last_name.touched)" class="alert alert-danger">
+										Last_name is required
+									</div>
+									<div class="form-group">
+										<input ngModel type="email" #email="ngModel" name="email" id="email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" tabindex="1" required class="form-control" placeholder="Email Address" value="">
+									</div>
+										<div *ngIf="email.errors && (email.dirty || email.touched)" class="alert alert-danger">
+										<span *ngIf="email.errors.required">Email is required </span>
+										<span *ngIf="email.errors.pattern">Email does not match the pattern</span>
+									</div>
+									<div class="form-group">
+										<input ngModel type="password" #password="ngModel" name="password" id="password" required tabindex="2" class="form-control" placeholder="Password">
+									</div>
+										<div *ngIf="password.errors && (password.dirty || password.touched)" class="alert alert-danger">
+										Password is required
+									</div>
+									<div class="form-group">
+										<input ngModel type="password" name="confirm-password"  required id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="register-submit" [disabled]="!registerForm.form.valid" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
     </popup>

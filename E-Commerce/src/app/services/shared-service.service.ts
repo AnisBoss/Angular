@@ -60,4 +60,17 @@ getProductByID(id){
     return this.http.get('http://127.0.0.1:8000/api/products/?Brand__contains='+value);
     
   }
+
+
+login(username,password)
+{
+  return this.http.post("http://127.0.0.1:8000/api/user/login/",{"username" : username,"password":password});
+}
+
+register(username,password,email,first_name,last_name)
+{
+  return this.http.post("http://127.0.0.1:8000/api/user/register/",{"username":username,"password":password,
+  "email":email,"fisrt_name":first_name,"last_name":last_name});
+}
+
 }

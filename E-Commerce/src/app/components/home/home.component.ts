@@ -3,6 +3,7 @@ import { SharedServiceService } from '../../services/shared-service.service';
 import { Subscription } from "rxjs/Subscription";
 import { Popup } from 'ng2-opd-popup';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -21,6 +22,19 @@ export class HomeComponent implements OnInit {
   myValue: String = "";
   product: any = [];
   basket: any = [];
+
+
+
+
+
+
+
+
+
+
+
+
+
   private subscription: Subscription;
   private subscriptionSearch: Subscription;
   @ViewChild('popupHome') popup: Popup;
@@ -77,6 +91,7 @@ export class HomeComponent implements OnInit {
 
       this.basket.push(device);
       this.shared.basketEvent(device, this.basket);
+      this.popup.hide();
     }
 
   }

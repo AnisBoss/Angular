@@ -1,4 +1,5 @@
 from tastypie.resources import ModelResource
+from django.contrib.auth.models import User
 from api.models import Computer,Tablet,Smartphone,Products
 import api.models
 from tastypie.authorization import Authorization
@@ -7,7 +8,12 @@ from django.db import models
 from tastypie.utils import trailing_slash
 from tastypie.utils import trailing_slash
 from django.conf.urls import url, include
-
+from django.contrib.auth import authenticate, login, logout
+from tastypie.http import HttpUnauthorized, HttpForbidden
+from django.db import IntegrityError
+import datetime
+from datetime import timedelta
+from jose import jws
 class NoteResource(ModelResource):
     class Meta:
         queryset = Computer.objects.all()
@@ -57,3 +63,85 @@ class ProductsRessource(ModelResource):
 	        for field in Products.__dict__['_meta'].fields:
 	                ordering.append(field.name)
 
+class UserResource(ModelResource):
+    class Meta:
+        queryset = User.objects.all()
+        fields = ['first_name', 'last_name', 'email']
+        allowed_methods = ['get', 'post']
+        resource_name = 'user'
+
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/login%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('login'), name="api_login"),
+            url(r'^(?P<resource_name>%s)/logout%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('logout'), name='api_logout'),
+            url(r'^(?P<resource_name>%s)/register/$' %
+                (self._meta.resource_name,),
+                self.wrap_view('register'), name='api_logout'),
+	]
+    def register(self,request,**kwargs):
+	self.method_check(request, allowed=['post'])
+	data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+	username = data.get('username', '')
+	password = data.get('password', '')
+	email 	 = data.get('email','')
+	first_name=data.get('first_name','')
+	last_name=data.get('last_name','')
+	try :
+		user = User.objects.create_user(username)
+	except IntegrityError:
+		status="User already exists"
+	else:
+		user.set_password(password)
+		user.email=email
+		user.first_name=first_name
+		user.last_name=last_name
+		print str(user)
+		user.save()
+		status="new user was created"
+		return self.login(request)
+	return self.create_response(request, { 'status': status })
+    def login(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+
+        data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+	#user = User.objects.create_user('jkd')
+	#user.set_password('space')
+	#user.save()
+	#user = authenticate(username='jkd', password='space')
+	#print "User:",str(user)
+        username = data.get('username', '')
+        password = data.get('password', '')
+        user = authenticate(request,username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                #return self.create_response(request, {'success': True})
+		return self.create_response(request,{'success':True,"username" : user.username ,"token": self.create_jwt(username,password)})
+            else:
+                return self.create_response(request, {
+                    'success': False,
+                    'reason': 'disabled',
+                    }, HttpForbidden )
+        else:
+            return self.create_response(request, {
+                'success': False,
+                'reason': 'incorrect',
+                },HttpUnauthorized)
+
+    def logout(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        if request.user and request.user.is_authenticated():
+            logout(request)
+            return self.create_response(request, { 'success': True })
+        else:
+            return self.create_response(request, { 'success': False }, HttpUnauthorized)
+
+
+    def create_jwt(self,username,password):
+	expiry = datetime.date.today().isoformat() + str(timedelta(days=50))
+    	token = jws.sign({'username': username, 'expiry':expiry}, 'seKre8', algorithm='HS256')
+     	return token

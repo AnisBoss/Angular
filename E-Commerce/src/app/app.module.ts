@@ -12,11 +12,13 @@ import { AboutComponent } from './components/about/about.component';
 import {SharedServiceService} from './services/shared-service.service';
 import { FilterPipe }from './components/home/filter.pipe';
 import {PopupModule} from 'ng2-opd-popup';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const appRoutes: Routes = [
   { path: 'home', component:HomeComponent  },
   { path: 'about',component: AboutComponent},
   { path: 'contact',component: ContactComponent, },
+  { path: 'profile/:username',component : ProfileComponent,},
   { path: '**', component: HomeComponent }
 ];
 
@@ -29,7 +31,8 @@ const appRoutes: Routes = [
     HomeComponent,
     ContactComponent,
     AboutComponent,
-    FilterPipe
+    FilterPipe,
+    ProfileComponent
     
   ],
   imports: [
