@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 @Injectable()
 export class SharedServiceService {
 
@@ -70,7 +70,17 @@ login(username,password)
 register(username,password,email,first_name,last_name)
 {
   return this.http.post("http://127.0.0.1:8000/api/user/register/",{"username":username,"password":password,
-  "email":email,"fisrt_name":first_name,"last_name":last_name});
+  "email":email,"first_name":first_name,"last_name":last_name});
+}
+getUserByID(id)
+{
+  let headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});  
+ headers.append('Authorization','Token '+JSON.parse(localStorage.getItem("user")).token);
+
+  let options = new RequestOptions({headers: headers});
+  console.log("headers :"+this.headers.getAll);
+  console.log("token  :"+JSON.parse(localStorage.getItem("user")).token)
+  return this.http.get("http://127.0.0.1:8000/api/user/"+id+"/",{headers : headers});
 }
 
 }

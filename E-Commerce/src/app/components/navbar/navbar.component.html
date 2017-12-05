@@ -32,8 +32,8 @@
   <button class="btn-link dropdown-toggle" style="margin-top:14px" type="button" data-toggle="dropdown" >{{getUsername()}}
   <span class="caret"></span></button>
   <ul class="dropdown-menu">
-    <li><a href="/profile/{{getUsername()}}">Profile</a></li>
-    <li><a href="/logout/{{getUsername}}">Logout</a></li>
+    <li><a routerLink="/profile/{{getUsername()}}" routerLinkActive="active" >Profile</a></li>
+    <li><a (click)="logout()">Logout</a></li>
 
   </ul>
 </div> 
@@ -102,6 +102,10 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<form id="login-form"  role="form" style="display: block;" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+									<div class="form-group">
+										<span style="color : red" >{{reason}}</span>
+									</div>
+								
 									<div class="form-group">
 										<input ngModel type="text" name="username"  id="username" required tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>

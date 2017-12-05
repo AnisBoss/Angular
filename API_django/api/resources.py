@@ -14,6 +14,8 @@ from django.db import IntegrityError
 import datetime
 from datetime import timedelta
 from jose import jws
+from customAuthorization  import UserObjectsOnlyAuthorization
+
 class NoteResource(ModelResource):
     class Meta:
         queryset = Computer.objects.all()
@@ -63,13 +65,18 @@ class ProductsRessource(ModelResource):
 	        for field in Products.__dict__['_meta'].fields:
 	                ordering.append(field.name)
 
+
+
+
+
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
-        fields = ['first_name', 'last_name', 'email']
-        allowed_methods = ['get', 'post']
+        fields = ['first_name', 'last_name', 'email','last_login','date_joined','username']
+        allowed_methods = ['get', 'post','options']
         resource_name = 'user'
-
+	authorization=UserObjectsOnlyAuthorization();
+#	authorization=Authorization();
     def prepend_urls(self):
         return [
             url(r"^(?P<resource_name>%s)/login%s$" %
@@ -120,7 +127,7 @@ class UserResource(ModelResource):
             if user.is_active:
                 login(request, user)
                 #return self.create_response(request, {'success': True})
-		return self.create_response(request,{'success':True,"username" : user.username ,"token": self.create_jwt(username,password)})
+		return self.create_response(request,{'success':True,"id" : user.id,"username" : user.username ,"token": self.create_jwt(username,password)})
             else:
                 return self.create_response(request, {
                     'success': False,
@@ -130,7 +137,7 @@ class UserResource(ModelResource):
             return self.create_response(request, {
                 'success': False,
                 'reason': 'incorrect',
-                },HttpUnauthorized)
+                })
 
     def logout(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
@@ -145,3 +152,4 @@ class UserResource(ModelResource):
 	expiry = datetime.date.today().isoformat() + str(timedelta(days=50))
     	token = jws.sign({'username': username, 'expiry':expiry}, 'seKre8', algorithm='HS256')
      	return token
+
