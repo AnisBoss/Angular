@@ -158,7 +158,24 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/home']);
   }
 
-
+saveBasket()
+{
+  var last_id;
+  for(let i=0;i<this.products.length;i++)
+  {
+    this.shared.getLatestID().subscribe(response =>{
+      last_id=response.json()["objects"][0].id+1;
+      console.log("id ahawaaa : "+last_id);
+      console.log("user_id : "+JSON.parse(localStorage.getItem("user")).id);
+      console.log("product_id : "+this.products[i].id);
+        this.shared.saveBasket(JSON.parse(localStorage.getItem("user")).id,this.products[i].id,last_id+i).
+    subscribe(response =>{
+      console.log("jawek fesfess 7oby");
+    }) ;
+    })
+  
+  }
+}
 
 
 

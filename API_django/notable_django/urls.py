@@ -15,12 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from api.resources import NoteResource,TabletResource,SmartphoneResource,ProductsRessource,UserResource
+from api.resources import NoteResource,TabletResource,SmartphoneResource,ProductsRessource,UserResource,SalesDetailsRessource
 note_resource = NoteResource()
 tablet_resource = TabletResource()
 smartphone_resource=SmartphoneResource()
 products_resource=ProductsRessource()
 user_ressource=UserResource()
+sales_ressource=SalesDetailsRessource()
 urlpatterns = [
 	url(r'^admin/', admin.site.urls),
 	url(r'^api/',include(note_resource.urls)),
@@ -28,4 +29,5 @@ urlpatterns = [
         url(r'^api/',include(smartphone_resource.urls)),
 	url(r'^api/',include(products_resource.urls)),
 	url(r'^api/',include(user_ressource.urls)),
+	url(r'^api/',include(sales_ressource.urls)),
 ]

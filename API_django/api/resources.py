@@ -1,6 +1,6 @@
 from tastypie.resources import ModelResource
 from django.contrib.auth.models import User
-from api.models import Computer,Tablet,Smartphone,Products
+from api.models import Computer,Tablet,Smartphone,Products,SalesDetails
 import api.models
 from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
@@ -65,6 +65,18 @@ class ProductsRessource(ModelResource):
 	        for field in Products.__dict__['_meta'].fields:
 	                ordering.append(field.name)
 
+class SalesDetailsRessource(ModelResource):
+	class Meta:
+		queryset=SalesDetails.objects.all()
+                resource_name= 'salesDetails'
+                authorization = Authorization()
+		fields = ['id','user_id','product_id']
+                filtering = {}
+                for field in SalesDetails.__dict__['_meta'].fields:
+                        filtering.update({field.name : ALL_WITH_RELATIONS})
+                ordering=[]
+                for field in SalesDetails.__dict__['_meta'].fields:
+                        ordering.append(field.name)
 
 
 

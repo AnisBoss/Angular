@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -32,3 +32,11 @@ class Products(models.Model):
         Brand = models.TextField()
         Path = models.TextField()
 	Type = models.TextField()
+
+class SalesDetails(models.Model):
+#	user_id=models.ForeignKey(User,to_field="id",db_column="user_id")
+#	product_id=models.ForeignKey(Products,to_field="id",db_column="product_id")
+	user_id=models.TextField()
+	product_id=models.TextField()
+	class Meta:
+		unique_together = (("user_id", "product_id"),)

@@ -53,7 +53,7 @@
 </nav>
     <!-- /.navbar-collapse -->
 
-    <popup  class="ng2" #popupNavbar >
+    <popup  class="ng2" #popupNavbar (confirmClick)="saveBasket()">
       <div style="overflow-y: scroll;height:200px">
     <div  *ngFor="let product of products; let i = index">
             <div style="height:20px" data-category="view">
