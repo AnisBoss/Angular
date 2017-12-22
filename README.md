@@ -41,15 +41,15 @@ Run `python manage.py runserver` for a dev server. Navigate to `http://localhost
 ##Demo 
 
 **Home**
-![Alt text](imgs/home_page.jpeg?raw=true "Home Page")
+![Alt text](/imgs/home_page.jpeg?raw=true "Home Page")
 **Profile**
-![Alt text](imgs/profile.jpeg?raw=true "Profile")
+![Alt text](/imgs/profile.jpeg?raw=true "Profile")
 **Activity Feed**
-![Alt text](imgs/feed.jpeg?raw=true "Activity Feed")
+![Alt text](/imgs/feed.jpeg?raw=true "Activity Feed")
 **Basket Content**
-![Alt text](imgs/basket.jpeg?raw=true "Basket Content")
+![Alt text](/imgs/basket.jpeg?raw=true "Basket Content")
 **Interactive Search**
-![Alt text](imgs/search.jpeg?raw=true "Interactive Search")
+![Alt text](/imgs/search.jpeg?raw=true "Interactive Search")
 
 
 
