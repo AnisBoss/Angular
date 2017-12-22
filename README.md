@@ -48,6 +48,8 @@ Run `python manage.py runserver` for a dev server. Navigate to `http://localhost
 ![Alt text](imgs/feed.jpeg?raw=true "Activity Feed")
 **Basket Content**
 ![Alt text](imgs/basket.jpeg?raw=true "Basket Content")
+**Interactive Search**
+![Alt text](imgs/search.jpeg?raw=true "Interactive Search")
 
 
 

