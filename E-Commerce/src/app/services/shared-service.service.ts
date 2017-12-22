@@ -70,7 +70,7 @@ login(username,password)
   return this.http.post("http://127.0.0.1:8000/api/user/login/",{"username" : username,"password":password});
 }
 
-register(username,password,email,first_name,last_name)
+register(username,email,password,first_name,last_name)
 {
   return this.http.post("http://127.0.0.1:8000/api/user/register/",{"username":username,"password":password,
   "email":email,"first_name":first_name,"last_name":last_name});
@@ -117,6 +117,10 @@ saveBasket(user_id,product_id,last_id)
  //return this.last_id ;
 
  return  this.http.put("http://127.0.0.1:8000/api/salesDetails/"+last_id+"/",{"user_id":user_id,"product_id":product_id});
+}
+getBasket(user_id)
+{
+  return this.http.get("http://127.0.0.1:8000/api/salesDetails/?user_id="+user_id);
 }
 
 }

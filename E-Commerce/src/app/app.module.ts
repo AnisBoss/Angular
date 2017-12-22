@@ -17,6 +17,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 
 const appRoutes: Routes = [
   { path: 'home', component:HomeComponent  },
+  { path : '',component:HomeComponent},
   { path: 'about',component: AboutComponent},
   { path: 'contact',component: ContactComponent, },
   { path: 'profile/:username',component : ProfileComponent,},

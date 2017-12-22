@@ -40,11 +40,10 @@
 
 
       <div>
-        <form class="navbar-form navbar-toggler" style="margin-left:800px;" role="search">
+        <form class="navbar-form navbar-toggler" class="col-md-2 col-md-offset-3" style="margin-top:10px;" role="search">
           <div class="form-group">
             <input type="text" [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" class="form-control" size="10" placeholder="Product Here ..."/>
           </div>
-          <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-search" ></span></button>
         </form>
       </div>
       
@@ -136,6 +135,9 @@
 									</div>
 								</form>
 								<form id="register-form"  role="form" style="display: none;" #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+											<div class="form-group">
+										<span style="color : red" >{{reason}}</span>
+									</div>
 									<div class="form-group">
 										<input ngModel type="text" name="username"  #username="ngModel" id="username" required tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
